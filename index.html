@@ -8,7 +8,7 @@
 
 /* Light mode and Dark mode */
 body {
-  --primary-color: #379196;
+  --primary-color: #3f8bc5;
   --secondary-color: #2c3e50;
   --background-color: #f5f5f5;
   --bb: white;
@@ -162,6 +162,8 @@ button:active {
   color: white;
 }
 
+
+
 input:checked + .slider {
   background-color: #5921f3;
 }
@@ -210,7 +212,9 @@ input:checked + .slider:after {
       <!-- Create a 9x9 grid of input cells -->
     </div>
     <button id="solveBtn">Solve</button>
+    <button id="solveBtn" onclick=location.reload()>Reset</button>
     <div class="solutions" id="solutions"></div>
+    <div id="emptyElement"></div>
   </div>
 
   <script>
@@ -231,7 +235,9 @@ input:checked + .slider:after {
     }
 
     // Event listener for the solve button
-    solveBtn.addEventListener('click', () => {
+    solveBtn.addEventListener('click', solveSudoku);
+
+    function solveSudoku() {
       const puzzle = [];
       let index = 0;
 
@@ -247,13 +253,13 @@ input:checked + .slider:after {
       }
 
       // Solve the puzzle
-      const solution = solveSudoku(puzzle);
+      const solution = solveSudokuHelper(puzzle);
 
       // Update the board with the solved puzzle
       animateSolution(solution);
-    });
+    }
 
-    function solveSudoku(board) {
+    function solveSudokuHelper(board) {
       if (!findEmptyCell(board)) {
         return board;
       }
@@ -264,7 +270,7 @@ input:checked + .slider:after {
         if (isValidMove(board, row, col, num)) {
           board[row][col] = num;
 
-          if (solveSudoku(board)) {
+          if (solveSudokuHelper(board)) {
             return board;
           }
 
@@ -333,31 +339,30 @@ input:checked + .slider:after {
       }
     }
 
+  
+
     function toggleMode() {
       const body = document.body;
       body.classList.toggle("dark-mode");
 
-      // Save the user's preference in local storage
       const isDarkMode = body.classList.contains("dark-mode");
       localStorage.setItem("darkMode", isDarkMode);
 
-      // Add or remove the class to hide the primary color after a delay
-      const primaryColorDelay = 3000; // 3 seconds
+      const primaryColorDelay = 3000; // 3 seconds delay
       setTimeout(() => {
         body.classList.add("hide-primary-color");
       }, primaryColorDelay);
     }
 
-    // Function to load the user's preference from local storage
     function loadModePreference() {
-      const isDarkMode = localStorage.getItem("darkMode");
-
-      if (isDarkMode === "true") {
-        document.body.classList.add("dark-mode");
+      const isDarkMode = localStorage.getItem("darkMode") === "true";
+      const body = document.body;
+      if (isDarkMode) {
+        body.classList.add("dark-mode");
       }
     }
 
-    loadModePreference();
+    document.addEventListener("DOMContentLoaded", loadModePreference);
   </script>
 </body>
 </html>
