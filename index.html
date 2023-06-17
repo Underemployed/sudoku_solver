@@ -1,3 +1,8 @@
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,6 +18,9 @@
       background-color: var(--background-color);
       color: var(--secondary-color);
       transition: background-color 0.3s ease, color 0.3s ease;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
     }
 
     body.dark-mode {
@@ -35,7 +43,14 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    
+    h1 {
+      margin-bottom: 20px;
+      font-size: 24px;
+      text-align: center;
     }
     
     #board {
@@ -45,10 +60,10 @@
     }
     
     input {
-      width: 30px;
-      height: 30px;
+      width: 40px;
+      height: 40px;
       text-align: center;
-      font-size: 14px;
+      font-size: 16px;
       background-color: var(--background-color);
       border: 1px solid var(--primary-color);
       color: var(--secondary-color);
@@ -59,8 +74,8 @@
       background-color: var(--primary-color);
       color: #fff;
       border: none;
-      padding: 5px 10px;
-      font-size: 12px;
+      padding: 10px 20px;
+      font-size: 14px;
       cursor: pointer;
       transition: background-color 0.3s ease;
     }
@@ -106,7 +121,6 @@
       width: 26px;
       height: 26px;
       background-image: url('screenshots/sun.png');
-      
       background-repeat: no-repeat;
       background-size: contain;
       border-radius: 50%;
@@ -123,35 +137,31 @@
       background-repeat: no-repeat;
       background-size: contain;
       border-radius: 50%;
-      transition: transform 0.3s ease;
+      transition: transform 0.3 ease;
     }
     
+    
     input:checked + .slider {
-      background-color: var(--secondary-color);
+      background-color: #5921f3;
+      background-image: url('screenshots/sun.png');
+
+
+
+
     }
     
     input:checked + .slider:before {
       transform: translateX(26px);
       background-image: url('screenshots/rest.png');
+
+
     }
+
     
-    input:checked + .slider:after {
-      transform: translateX(-26px);
-      background-image: url();
-    }
-    
-    @media only screen and (max-width: 600px) {
-      input {
-        width: 40px;
-        height: 40px;
-        font-size: 16px;
-      }
-    
-      button {
-        width: 30px;
-        height: 30px;
-        font-size: 12px;
-      }
+    .solutions {
+      margin-top: 20px;
+      font-size: 16px;
+      font-weight: bold;
     }
   </style>
   <title>Sudoku Solver</title>
@@ -169,8 +179,13 @@
       <!-- Create a 9x9 grid of input cells -->
     </div>
     <button id="solveBtn">Solve</button>
+    <div class="solutions" id="solutions"></div>
   </div>
 
   <script src="script.js"></script>
 </body>
 </html>
+
+
+
+
