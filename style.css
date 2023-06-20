@@ -292,7 +292,7 @@ input:checked + .slider:after {
 }
 
 .cell .dark-mode{
-  background-color: #333;
+  background-color:rgb(33, 37, 41);
   color: #fff;
 }
 
