@@ -1,0 +1,40 @@
+* {
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    border: 0;
+    appearance: 0;
+    list-style: none;
+    text-decoration: none;
+    box-sizing: border-box;
+  }
+  
+  /* Light mode and Dark mode */
+  body {
+    --primary-color: #3f8bc5;
+    --secondary-color: #2c3e50;
+    --background-color: #f5f5f5;
+    --bb: white;
+    background-color: var(--bb);
+    color: var(--secondary-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body.dark-mode {
+    --primary-color: #65a2b7;
+    --secondary-color: rgb(183, 181, 181);
+    --background-color: #212529;
+    --bb: #242424;
+  }
+  
+  body.dark-mode button {
+    box-shadow: none;
+  }
+  
+  body.dark-mode #board {
+    border-color: #555;
+  }
+  

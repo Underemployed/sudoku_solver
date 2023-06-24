@@ -1,33 +1,56 @@
-const solveBtn = document.getElementById('solveBtn');
-const resetBtn = document.getElementById('resetBtn');
-const board = document.getElementById('board');
-let cells = [];
+// script.js
 
-// Generate the Sudoku board with input cells
-for (let i = 0; i < 9; i++) {
-  for (let j = 0; j < 9; j++) {
-    const input = document.createElement('input');
-    input.type = 'text';
-    input.className = 'cell';
-    input.maxLength = '1';
-    board.appendChild(input);
-    cells.push(input);
-  }
+// Utility function to create an element with attributes
+function createElement(tag, attributes = {}) {
+  const element = document.createElement(tag);
+  Object.entries(attributes).forEach(([key, value]) => {
+    element.setAttribute(key, value);
+  });
+  return element;
 }
 
-// Event listener for the solve button
-solveBtn.addEventListener('click', solveSudoku);
+// Generate the Sudoku board with input cells
+function generateBoard() {
+  const board = document.getElementById('board');
+  const cells = [];
 
-// Event listener for the reset button
-resetBtn.addEventListener('click', () => {
-  location.reload();
-});
+  for (let i = 0; i < 9; i++) {
+    for (let j = 0; j < 9; j++) {
+      const input = createElement('input', {
+        type: 'text',
+        class: 'cell',
+        maxLength: '1',
+        inputMode: 'tel'
+      });
+      board.appendChild(input);
+      cells.push(input);
+    }
+  }
 
+  return cells;
+}
+
+// Solve the Sudoku puzzle
 function solveSudoku() {
+  const cells = generateBoard();
+  const solveBtn = document.getElementById('solveBtn');
+  const resetBtn = document.getElementById('resetBtn');
+
+  solveBtn.addEventListener('click', () => {
+    const puzzle = createPuzzle(cells);
+    const solution = solveSudokuHelper(puzzle);
+    animateSolution(cells, solution);
+  });
+
+  resetBtn.addEventListener('click', () => {
+    location.reload();
+  });
+}
+
+function createPuzzle(cells) {
   const puzzle = [];
   let index = 0;
 
-  // Create a 2D array representing the Sudoku puzzle
   for (let i = 0; i < 9; i++) {
     const row = [];
     for (let j = 0; j < 9; j++) {
@@ -38,11 +61,7 @@ function solveSudoku() {
     puzzle.push(row);
   }
 
-  // Solve the puzzle
-  const solution = solveSudokuHelper(puzzle);
-
-  // Update the board with the solved puzzle
-  animateSolution(solution);
+  return puzzle;
 }
 
 function solveSudokuHelper(board) {
@@ -79,21 +98,18 @@ function findEmptyCell(board) {
 }
 
 function isValidMove(board, row, col, num) {
-  // Check row
   for (let j = 0; j < 9; j++) {
     if (board[row][j] === num) {
       return false;
     }
   }
 
-  // Check column
   for (let i = 0; i < 9; i++) {
     if (board[i][col] === num) {
       return false;
     }
   }
 
-  // Check 3x3 box
   const startRow = Math.floor(row / 3) * 3;
   const startCol = Math.floor(col / 3) * 3;
   for (let i = startRow; i < startRow + 3; i++) {
@@ -107,7 +123,7 @@ function isValidMove(board, row, col, num) {
   return true;
 }
 
-function animateSolution(solution) {
+function animateSolution(cells, solution) {
   const delay = 100;
 
   for (let i = 0; i < 9; i++) {
@@ -132,7 +148,7 @@ function toggleMode() {
   const isDarkMode = body.classList.contains("dark-mode");
   localStorage.setItem("darkMode", isDarkMode);
 
-  const primaryColorDelay = 3000; // 3 seconds delay
+  const primaryColorDelay = 3000;
   setTimeout(() => {
     body.classList.add("hide-primary-color");
   }, primaryColorDelay);
@@ -146,20 +162,25 @@ function loadModePreference() {
   }
 }
 
-const switchInput = document.createElement("input");
-switchInput.type = "checkbox";
-switchInput.id = "switchInput";
-switchInput.checked = localStorage.getItem("darkMode") === "true";
+const switchInput = createElement("input", {
+  type: "checkbox",
+  id: "switchInput",
+  checked: localStorage.getItem("darkMode") === "true"
+});
 
-const slider = document.createElement("div");
-slider.className = "slider";
+const slider = createElement("div", {
+  class: "slider"
+});
 slider.addEventListener("click", toggleMode);
 
-const switchElement = document.createElement("label");
-switchElement.className = "switch";
+const switchElement = createElement("label", {
+  class: "switch"
+});
 switchElement.appendChild(switchInput);
 switchElement.appendChild(slider);
 
 document.body.appendChild(switchElement);
 
 loadModePreference();
+
+solveSudoku();
