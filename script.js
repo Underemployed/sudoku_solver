@@ -1,5 +1,3 @@
-// script.js
-
 // Utility function to create an element with attributes
 function createElement(tag, attributes = {}) {
   const element = document.createElement(tag);
@@ -38,8 +36,12 @@ function solveSudoku() {
 
   solveBtn.addEventListener('click', () => {
     const puzzle = createPuzzle(cells);
-    const solution = solveSudokuHelper(puzzle);
-    animateSolution(cells, solution);
+    if (isSolvable(puzzle)) {
+      const solution = solveSudokuHelper(puzzle);
+      animateSolution(cells, solution);
+    } else {
+      alert("The provided Sudoku problem is unsolvable. Please check your input.");
+    }
   });
 
   resetBtn.addEventListener('click', () => {
@@ -139,6 +141,51 @@ function animateSolution(cells, solution) {
       }
     }
   }
+}
+
+function isSolvable(board) {
+  // Perform the solvability check logic here
+  // Return true if the problem is solvable, otherwise return false
+
+  // Example implementation: Check if any of the rows, columns, or boxes have duplicate values
+  for (let i = 0; i < 9; i++) {
+    if (!isUnique(board[i]) || !isUnique(getColumn(board, i)) || !isUnique(getBox(board, i))) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function isUnique(arr) {
+  const seen = new Set();
+  for (const value of arr) {
+    if (value !== 0 && seen.has(value)) {
+      return false;
+    }
+    seen.add(value);
+  }
+  return true;
+}
+
+function getColumn(board, colIndex) {
+  const column = [];
+  for (let i = 0; i < 9; i++) {
+    column.push(board[i][colIndex]);
+  }
+  return column;
+}
+
+function getBox(board, boxIndex) {
+  const box = [];
+  const startRow = Math.floor(boxIndex / 3) * 3;
+  const startCol = (boxIndex % 3) * 3;
+  for (let i = startRow; i < startRow + 3; i++) {
+    for (let j = startCol; j < startCol + 3; j++) {
+      box.push(board[i][j]);
+    }
+  }
+  return box;
 }
 
 function toggleMode() {
