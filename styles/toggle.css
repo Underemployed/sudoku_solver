@@ -30,7 +30,7 @@
     bottom: 4px;
     width: 26px;
     height: 26px;
-    background-image: url('screenshots/sun.png');
+    background-image: url('../screenshots/sun.png');
     background-repeat: no-repeat;
     background-size: contain;
     border-radius: 50%;
@@ -57,7 +57,7 @@
   
   input:checked + .slider:before {
     transform: translateX(26px);
-    background-image: url('screenshots/rest.png');
+    background-image: url('../screenshots/rest.png');
   }
   
   input:checked + .slider:after {
