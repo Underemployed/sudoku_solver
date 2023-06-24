@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    * {
+  margin: 0;
+  padding: 0;
+  outline: 0;
+  border: 0;
+  appearance: 0;
+  list-style: none;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
+/* Light mode and Dark mode */
+body {
+  --primary-color: #3f8bc5;
+  --secondary-color: #2c3e50;
+  --background-color: #f5f5f5;
+  --bb: white;
+  background-color: var(--bb);
+  color: var(--secondary-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+body.dark-mode {
+  --primary-color: #65a2b7;
+  --secondary-color: rgb(183, 181, 181);
+  --background-color: #212529;
+  --bb: #242424;
+}
+
+body.dark-mode button {
+  box-shadow: none;
+}
+
+body.dark-mode #board {
+  border-color: #555;
+}
+
+/* Sudoku Solver */
+#container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+h1 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  text-align: center;
+}
+
+#board {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  margin-top: 20px;
+  border: 2px solid var(--primary-color);
+}
+
+.cell {
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  font-size: 16px;
+  background-color: var(--background-color);
+  border: 1px solid var(--primary-color);
+  color: var(--secondary-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  cursor: pointer;
+}
+
+.cell:hover {
+  background-color: #e6e6e6;
+}
+
+input {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  font-size: 16px;
+  background-color: var(--background-color);
+  border: 1px solid var(--primary-color);
+  color: var(--secondary-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+button {
+  margin-top: 20px;
+  background-color: var(--primary-color);
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #6db9c5;
+}
+
+button:active {
+  background-color: #447c8a;
+}
+
+.solutions {
+  margin-top: 20px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.switch {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  background-color: yellow;
+  border-radius: 34px;
+  transition: background-color 0.3s ease;
+}
+
+.slider:before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  bottom: 4px;
+  width: 26px;
+  height: 26px;
+  background-image: url('screenshots/sun.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  border-radius: 50%;
+  transition: transform 0.5s ease;
+}
+
+.slider:after {
+  content: "";
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  width: 26px;
+  height: 26px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  color: yellow;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+}
+
+
+input:checked + .slider {
+  background-color: #5921f3;
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+  background-image: url('screenshots/rest.png');
+}
+
+input:checked + .slider:after {
+  transform: translateX(-26px);
+}
+
+/* Animation */
+.fill-animation {
+  animation-name: fillCell;
+  animation-duration: 0.5s;
+  animation-timing-function: ease;
+  animation-fill-mode: forwards;
+}
+
+@keyframes fillCell {
+  from {
+  }
+  to {
+    background-color: rgb(66, 64, 148);
+    color: #fff;
+  }
+}
+
+.wrong-cell {
+  background-color: red;
+}
+
+#hintBtn {
+  background-color: #4a98ff;
+}
+
+#resetBtn {
+  background-color: #4C4AFF;
+}
+
+.Btn {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  text-align: center;
+  text-decoration: none;
+  color: white;
+  border: none;
+  border-radius: 25px; /* Increase the border-radius value for curvier buttons */
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 90px; /* Set the width to the desired value for a square shape */
+  height: 70px; /* Set the height to the same value as the width */
+  margin-right: 10px; /* Add some spacing between the buttons */
+}
+
+.Btn:hover {
+  background-color: #fff;
+}
+
+/* Button Icon */
+.button-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 5px; /* Add some spacing between the icon and the text */
+}
+
+
+#emptyElement {
+  height: 20px;
+}
+.Btn:hover {
+  background-color: #fff;
+  color: black;
+  
+}
+
+.Btn:hover .button-icon {
+  filter: brightness(0.8); /* Adjust the brightness to your preference */
+}
+
+#solveBtn {
+  background-color: #2c3e50;
+
+  color: white; /* Change the text color to black */
+}
+
+
+#solveBtn:hover {
+  color: black;
+}
+
+#solveBtn:hover .button-icon path {
+  fill: BLACK; /* Change the icon color to white on hover */
+  
+}
+
+
+.button-icon path {
+  fill: white; /* Set the initial icon color to white */
+  transition: fill 0.3s ease; /* Add a transition effect for a smooth color change */
+}
+
+.Btn:hover .button-icon path {
+  fill: black; /* Change the icon color to black on hover */
+}
+
+.cell.prefilled {
+  color: red;
+}
+.cell.hint {
+  background-color: #00c6ff;
+}
+
+
+.wrong {
+  background-color: #ffb6b6;
+}
+.dark-mode .board {
+  border-color: #fff;
+}
+
+.cell .dark-mode{
+  background-color:rgb(33, 37, 41);
+  color: #fff;
+}
+
+.dark-mode .prefilled {
+  background-color: #777;
+}
+
+.dark-mode .wrong {
+  background-color: #b84d4d;
+}
+
+.dark-mode .hint {
+  background-color: #4db84d;
+}
+</style>
+<title>Sudoku Solver</title>
+</head>
+<body class="light-mode">
+<div id="container">
+    <h1>Sudoku Helper</h1>
+    <h3>A helper that helps you solve Sudoku puzzles</h3>
+    <div class="emptyElement"></div>
+    <div id="board">
+    <!-- Create a 9x9 grid of input cells -->
+    </div>
+    <div id="emptyElement"></div>
+    <div>
+    <button id="solveBtn" class="Btn">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="search" class="button-icon">
+        <path fill="#6563FF" d="M21.71,20.29,18,16.61A9,9,0,1,0,16.61,18l3.68,3.68a1,1,0,0,0,1.42,0A1,1,0,0,0,21.71,20.29Z"></path>
+        </svg>
+        Solve
+    </button>
+    <button id="resetBtn" class="Btn">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="redo" class="button-icon"><path fill="#6563FF" d="M21,11a1,1,0,0,0-1,1,8.05,8.05,0,1,1-2.22-5.5h-2.4a1,1,0,0,0,0,2h4.53a1,1,0,0,0,1-1V3a1,1,0,0,0-2,0V4.77A10,10,0,1,0,22,12,1,1,0,0,0,21,11Z"></path></svg>
+        Reset
+    </button>
+    <button id="hintBtn" class ='Btn'> 
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="lightbulb" class="button-icon" scale="1.6">
+        <path fill="#6563FF" d="M17.09,2.82a8,8,0,0,0-6.68-1.66A8,8,0,0,0,4.14,7.48a8.07,8.07,0,0,0,1.72,6.65A4.54,4.54,0,0,1,7,17v3a3,3,0,0,0,3,3h4a3,3,0,0,0,3-3V17.19A5.17,5.17,0,0,1,18.22,14a8,8,0,0,0-1.13-11.2ZM15,20a1,1,0,0,1-1,1H10a1,1,0,0,1-1-1V19h6Zm1.67-7.24A7.13,7.13,0,0,0,15,17H13V14a1,1,0,0,0-2,0v3H9a6.5,6.5,0,0,0-1.6-4.16,6,6,0,0,1,3.39-9.72A6,6,0,0,1,18,9,5.89,5.89,0,0,1,16.67,12.76Z"></path>
+        </svg>
+        Hint
+    </button>
+
+    </div>
+</div>
+<script src="script.js"></script>
+
+</body>
+</html>
