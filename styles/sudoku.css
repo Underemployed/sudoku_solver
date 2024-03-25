@@ -129,7 +129,14 @@ button:active {
 }
 
 #solveBtn:hover .button-icon path {
-  fill: BLACK; /* Change the icon color to white on hover */
+  fill: black; 
+}
+#resetBtn:hover {
+  color: black;
+}
+
+#resetBtn:hover .button-icon path {
+  fill: black; 
 }
 
 .button-icon path {
@@ -137,9 +144,11 @@ button:active {
   transition: fill 0.3s ease; /* Add a transition effect for a smooth color change */
 }
 
-.Btn:hover .button-icon path {
+.Btn:hover {
   fill: black; /* Change the icon color to black on hover */
 }
+/* confused by colors wtvr */
+
 
 .fill-animation {
   animation-name: fillCell;

@@ -27,6 +27,30 @@ function generateBoard() {
 
   return cells;
 }
+function getHint(currentState, solutionState) {
+  let emptyCells = [];
+
+  // Find all empty cells and add their indices to the list
+  for (let i = 0; i < 9; i++) {
+    for (let j = 0; j < 9; j++) {
+      if (currentState[i][j] === 0) {
+        emptyCells.push([i, j]);
+      }
+    }
+  }
+
+  // Check if there are any empty cells
+  if (emptyCells.length === 0) {
+    return null; // No empty cells, return null
+  }
+
+  // Select a random empty cell
+  let randomIndex = Math.floor(Math.random() * emptyCells.length);
+  let [row, col] = emptyCells[randomIndex];
+
+  // Fill the random empty cell with the solution value
+  return [row, col, solutionState[row][col]];
+}
 
 // Solve the Sudoku puzzle
 function solveSudoku() {
@@ -38,7 +62,14 @@ function solveSudoku() {
     const puzzle = createPuzzle(cells);
     if (isSolvable(puzzle)) {
       const solution = solveSudokuHelper(puzzle);
-      animateSolution(cells, solution);
+      const hint = getHint(createPuzzle(cells), solution);
+      if (hint !== null) {
+        const [row, col, value] = hint;
+        // Fill the selected cell with the solution value and add the fill animation
+        const cell = cells[row * 9 + col];
+        cell.value = value;
+        cell.classList.add("fill-animation");
+      }
     } else {
       alert(
         "The provided Sudoku problem is unsolvable. Please check your input."
@@ -125,24 +156,6 @@ function isValidMove(board, row, col, num) {
   }
 
   return true;
-}
-
-function animateSolution(cells, solution) {
-  const delay = 100;
-
-  for (let i = 0; i < 9; i++) {
-    for (let j = 0; j < 9; j++) {
-      const cell = cells[i * 9 + j];
-      const value = solution[i][j];
-
-      if (value !== 0) {
-        setTimeout(() => {
-          cell.classList.add("fill-animation");
-          cell.value = value;
-        }, i * 9 * delay + j * delay);
-      }
-    }
-  }
 }
 
 function isSolvable(board) {
